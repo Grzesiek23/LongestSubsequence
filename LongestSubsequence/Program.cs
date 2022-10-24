@@ -1,14 +1,26 @@
 ﻿using System.Text.RegularExpressions;
+using BenchmarkDotNet.Running;
+using LongestSubsequence;
 
-var random = new Random();
 
-var arr = Enumerable.Range(0, 200000).Select(x => random.Next(0, 50000)).Distinct().ToArray();
-var longest1 = LongestSubsequence(arr);
-PrintDetails(longest1, arr);
+// var random = new Random();
+//
+// var arr = Enumerable.Range(0, 200000).Select(x => random.Next(0, 50000)).Distinct().ToArray();
+// // arr = new[] {4, 6, 1, 3, 2, 4, 5, 100, 200, 1, 101, 105, 300, 102, 5, 104, 19, 103};
+//
+// var distinctArray = arr.Distinct().ToArray();
+// Array.Sort(distinctArray);
+//
+// var seqGrz = new SequencerGrzesiek(distinctArray);
+// var longest1 = seqGrz.LongestSubsequence();
+// PrintDetails(longest1, distinctArray);
+//
+// var seqDze = new SequencerDzemojad(arr);
+// var longest2 = seqDze.LongestSubsequence();
+// Console.WriteLine($"Najdłuższy ciąg ma długość {longest2.First().Value} i jest to [{string.Join(", ", Enumerable.Range(longest2.First().Key, longest2.First().Value))}]");
 
-arr = new[] {4, 6, 1, 3, 2, 4, 5, 100, 200, 1, 101, 105, 300, 102, 5, 104, 19, 103};
-var longest2 = LongestSubsequence(arr);
-PrintDetails(longest2, arr);
+
+BenchmarkRunner.Run(typeof(Program).Assembly);
 
 Console.Read();
 
@@ -33,34 +45,6 @@ static void PrintDetails(Dictionary<int, int> longestSets, int[] input)
     
     if(otherWithSameLength > 1) 
         Write($"Istnieje więcej ([{otherWithSameLength}]) ciągów o tej samej długości", ConsoleColor.Yellow);
-}
-
-Dictionary<int,int> LongestSubsequence(int[] array)
-{
-    array = array.Distinct().ToArray();
-    
-    Array.Sort(array);
-
-    var longestSets = new Dictionary<int, int>(); //index - count
-
-    var current = 0;
-
-    for (var i = 0; i < array.Length - 1; i++)
-    {
-        if (i == array.Length - 2 && current > 1)
-            longestSets.Add(i + 1, current + 1);
-        else if (array[i] + 1 == array[i + 1])
-            current++;
-        else
-        {
-            if (current > 1)
-                longestSets.Add(i, current);
-
-            current = 0;
-        }
-    }
-
-    return longestSets;
 }
 
 static void Write(string message, ConsoleColor color)
