@@ -1,44 +1,42 @@
 ﻿using System.Text.RegularExpressions;
 
-int[] arr = {100, 200, 1, 101, 105, 300, 102, 5, 104, 19, 103};
-var subsequenceSet = LongestSubsequence(arr);
-Write(
-    $"Najdłuższy ciąg ma długość [{subsequenceSet.Count}] i jest to: [{string.Join(",", subsequenceSet.ToArray())}]",
-    ConsoleColor.Blue);
+var random = new Random();
+var arr = Enumerable.Range(0, 200000).Select(x => random.Next(0, 50000)).Distinct().ToArray();
+
+LongestSubsequence(arr);
+
 Console.Read();
 
-bool ArrayContains(IReadOnlyList<int> arr, int num)
+void LongestSubsequence(int[] array)
 {
-    for (var i = 0; (i < arr.Count); i++)
+    Array.Sort(array);
+    
+    var longestSets = new Dictionary<int, int>();
+    
+    var current = 0;
+    
+    for (var i = 0; i < array.Length - 1; i++)
     {
-        if (arr[i] == num)
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-List<int> LongestSubsequence(IReadOnlyList<int> array)
-{
-    var longestList = new List<int>();
-
-    foreach (var number in array)
-    {
-        var current = number;
-        var currentList = new List<int>() {number};
-        while (ArrayContains(array, (current + 1)))
-        {
+        if (array[i] + 1 == array[i + 1])
             current++;
-            currentList.Add(current);
+        else
+        {
+            if(current > 1)
+                longestSets.Add(i, current);
+            
+            current = 0;
         }
-
-        if (currentList.Count > longestList.Count)
-            longestList = currentList;
     }
 
-    return longestList;
+    if (!longestSets.Any()) Write("[No sequence found!]", ConsoleColor.Yellow);
+    
+    var longest = longestSets.MaxBy(x => x.Value);
+    var start = array[longest.Key - longest.Value];
+    var sequence = string.Join(",", Enumerable.Range(start, longest.Value + 1));
+
+    Write($"Znaleziono {longestSets.Count()} ciągów", ConsoleColor.Green);
+    
+    Write($"Najdłuższy ciąg ma długość [{longest.Value + 1}] i jest to [{sequence}]", ConsoleColor.Cyan);
 }
 
 static void Write(string message, ConsoleColor color)
