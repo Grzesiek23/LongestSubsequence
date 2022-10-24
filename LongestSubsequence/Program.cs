@@ -28,7 +28,11 @@ void LongestSubsequence(int[] array)
         }
     }
 
-    if (!longestSets.Any()) Write("[No sequence found!]", ConsoleColor.Yellow);
+    if (!longestSets.Any())
+    {
+        Write("[No sequence found!]", ConsoleColor.Yellow);
+        return;
+    }
     
     var longest = longestSets.MaxBy(x => x.Value);
     var start = array[longest.Key - longest.Value];
