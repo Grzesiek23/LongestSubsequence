@@ -1,9 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 
-int[] arr = {100, 4, 200, 1, 3, 2};
+int[] arr = {100, 200, 1, 101, 105, 300, 102, 5, 104, 19, 103};
 var subsequenceSet = LongestSubsequence(arr);
 Write(
-    $"Najdłuższy ciąg ma długość [{subsequenceSet.Count}] i jest to: [{string.Join(",", subsequenceSet.ToArray())}]", ConsoleColor.Blue);
+    $"Najdłuższy ciąg ma długość [{subsequenceSet.Count}] i jest to: [{string.Join(",", subsequenceSet.ToArray())}]",
+    ConsoleColor.Blue);
 Console.Read();
 
 bool ArrayContains(IReadOnlyList<int> arr, int num)
@@ -26,7 +27,7 @@ List<int> LongestSubsequence(IReadOnlyList<int> array)
     foreach (var number in array)
     {
         var current = number;
-        var currentList = new List<int>() {1};
+        var currentList = new List<int>() {number};
         while (ArrayContains(array, (current + 1)))
         {
             current++;
